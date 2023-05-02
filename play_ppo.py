@@ -7,6 +7,8 @@ from stable_baselines3.common.env_util import make_vec_env
 from stable_baselines3.common.utils import set_random_seed
 from envs.SingleAgent.mine_toy import EpMineEnv
 
+import cv2
+
 def make_env(env_id, rank, seed=0):
     """
     Utility function for multiprocessed env.
@@ -25,23 +27,25 @@ def make_env(env_id, rank, seed=0):
 
 if __name__ == "__main__":
     env_id = "EpMineEnv-v0"
-    num_cpu = 4  # Number of processes to use
+    num_cpu = 1  # Number of processes to use
     # Create the vectorized environment
     # env = SubprocVecEnv([make_env(env_id, i) for i in range(num_cpu)])
 
     # Stable Baselines provides you with make_vec_env() helper
     # which does exactly the previous steps for you.
     # You can choose between `DummyVecEnv` (usually faster) and `SubprocVecEnv`
-    env = make_vec_env(env_id, n_envs=num_cpu, seed=0, vec_env_cls=DummyVecEnv)
+    # env = make_vec_env(env_id, n_envs=num_cpu, seed=0, vec_env_cls=DummyVecEnv)
+
+    env = EpMineEnv(port=3000)
     # env = gym.make("EpMineEnv-v0")
     # model = PPO("CnnPolicy", env, verbose=1)
-    model = PPO.load("./model.zip", env, verbose=1)
-    model.learn(total_timesteps=1e6)
+    model = PPO.load("./models/model.zip", env, verbose=1)
+    # model.learn(total_timesteps=1e6)
 
     obs = env.reset()
-    for _ in range(1000):
+
+    for _ in range(10000):
         action, _states = model.predict(obs)
         obs, rewards, dones, info = env.step(action)
+        # cv2.imwrite(f"D:\\coding\\PythonProjects\\data\\img_epMine\\trainning\\pic_{_}_step.png", obs)
 
-    model.save("./model.zip")
-    

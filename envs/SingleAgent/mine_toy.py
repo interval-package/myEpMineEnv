@@ -38,7 +38,7 @@ class EpMineEnv(gym.Env):
                  max_episode_steps: int = 1000,
                  only_image: bool = True,
                  only_state: bool = False,
-                 no_graph: bool = True):
+                 no_graph: bool = False):
         engine_configuration_channel = EngineConfigurationChannel()
         engine_configuration_channel.set_configuration_parameters(width=200, height=100,
                                                                       time_scale=time_scale)
