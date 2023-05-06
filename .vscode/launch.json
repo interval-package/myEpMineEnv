@@ -29,6 +29,14 @@
             "justMyCode": true
         },
         {
+            "name": "Debug: generate pic",
+            "type": "python",
+            "request": "launch",
+            "program": "generate_random_pic.py",
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
             "name": "Debug: mine_toy",
             "type": "python",
             "request": "launch",
