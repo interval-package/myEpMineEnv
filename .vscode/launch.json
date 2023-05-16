@@ -29,10 +29,17 @@
             "justMyCode": true
         },
         {
-            "name": "Debug: mine_toy",
+            "name": "Test dillusion",
             "type": "python",
             "request": "launch",
-            "program": "envs/SingleAgent/mine_toy.py",
+            "program": "dillusion.py",
+            "args": [
+                "--dataroot", "./cycleGAN/datasets/epMine_ver4", 
+                "--checkpoints_dir", "./cycleGAN/checkpoints",
+                "--name", "frozen_net", 
+                "--model", "test",
+                "--model_suffix", "_A",
+                "--no_dropout"],
             "console": "integratedTerminal",
             "justMyCode": true
         },

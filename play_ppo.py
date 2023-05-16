@@ -6,6 +6,7 @@ from stable_baselines3.common.vec_env import DummyVecEnv, SubprocVecEnv
 from stable_baselines3.common.env_util import make_vec_env
 from stable_baselines3.common.utils import set_random_seed
 from envs.SingleAgent.mine_toy import EpMineEnv
+from envs.SingleAgent.TransEpMineEnv import TransEpMineEnv
 
 import cv2
 
@@ -36,16 +37,22 @@ if __name__ == "__main__":
     # You can choose between `DummyVecEnv` (usually faster) and `SubprocVecEnv`
     # env = make_vec_env(env_id, n_envs=num_cpu, seed=0, vec_env_cls=DummyVecEnv)
 
-    env = EpMineEnv(port=3000)
+    env = TransEpMineEnv(port=3000)
     # env = gym.make("EpMineEnv-v0")
-    # model = PPO("CnnPolicy", env, verbose=1)
-    model = PPO.load("./models/model.zip", env, verbose=1)
+    model = PPO("CnnPolicy", env, verbose=1)
+    # model = PPO.load("./models/model_nav", env, verbose=1)
     # model.learn(total_timesteps=1e6)
 
     obs = env.reset()
 
-    for _ in range(10000):
+    img_array = []
+    for _ in range(1000):
         action, _states = model.predict(obs)
         obs, rewards, dones, info = env.step(action)
+        img_array.append(obs)
         # cv2.imwrite(f"D:\\coding\\PythonProjects\\data\\img_epMine\\trainning\\pic_{_}_step.png", obs)
 
+    out = cv2.VideoWriter('project.avi',cv2.VideoWriter_fourcc(*'DIVX'), 15, (128,128))
+    for i in range(len(img_array)):
+        out.write(img_array[i])
+    out.release()

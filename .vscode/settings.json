@@ -4,5 +4,6 @@
         "**/.git": false
     },
     "files.autoSave": "afterDelay",
-    "workbench.colorTheme": "Solarized Light"
+    "workbench.colorTheme": "Solarized Light",
+    "liveServer.settings.port": 5501,
 }
