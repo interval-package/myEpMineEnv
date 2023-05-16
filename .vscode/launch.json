@@ -29,7 +29,19 @@
             "justMyCode": true
         },
         {
+<<<<<<< HEAD
             "name": "Test dillusion",
+=======
+            "name": "Debug: generate pic",
+            "type": "python",
+            "request": "launch",
+            "program": "generate_random_pic.py",
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Debug: mine_toy",
+>>>>>>> 8c572909d00c055b48ad0e067fb124e8bf1438b4
             "type": "python",
             "request": "launch",
             "program": "dillusion.py",

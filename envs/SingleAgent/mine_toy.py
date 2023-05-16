@@ -38,9 +38,13 @@ class EpMineEnv(gym.Env):
                  max_episode_steps: int = 1000,
                  only_image: bool = True,
                  only_state: bool = False,
-                 no_graph: bool = False):
+                 no_graph: bool = False,
+                 display_shape: tuple = (200, 100),
+                 obs_shape: tuple = (128, 128)
+                 ):
         engine_configuration_channel = EngineConfigurationChannel()
-        engine_configuration_channel.set_configuration_parameters(width=200, height=100,
+        # this configure the display of 
+        engine_configuration_channel.set_configuration_parameters(width=display_shape[0], height=display_shape[1],
                                                                       time_scale=time_scale)
         self._engine_Environment_channel = EnvironmentParametersChannel()
         self.env = None
@@ -57,6 +61,7 @@ class EpMineEnv(gym.Env):
         self.last_dist = 0.0
         self.current_results = None
         self.catch_state = 0
+        self.obs_shape = obs_shape
     
     def seed(self, sd=0):
         if self.env is not None:
@@ -76,7 +81,7 @@ class EpMineEnv(gym.Env):
     def observation_space(self):
         state_space = gym.spaces.Box(low=-np.Inf, high=np.Inf, shape=(7,), dtype=np.float32)
         if self.only_image:
-            image_space = gym.spaces.Box(low=0, high=255, shape=(128, 128, 3), dtype=np.uint8)
+            image_space = gym.spaces.Box(low=0, high=255, shape=(self.obs_shape[0], self.obs_shape[1], 3), dtype=np.uint8)
             return image_space
         elif self.only_state:
             return state_space

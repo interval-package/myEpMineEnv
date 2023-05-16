@@ -1,2 +1,4 @@
-envs/SingleAgent/MineField_Linux-0421/*
+envs/SingleAgent/MineField_*/*
 **/__pycache__/*
+models/*.zip
+data/images/*
