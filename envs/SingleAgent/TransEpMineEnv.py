@@ -5,7 +5,7 @@ import sys
 sys.path.append("../pytorch-CycleGAN-and-pix2pix")
 
 # import dillusion
-from server.numpy_tcp import bulr_img
+from server.numpy_tcp import blur_img
 
 class TransEpMineEnv(EpMineEnv):
     def __init__(self,
@@ -35,7 +35,7 @@ class TransEpMineEnv(EpMineEnv):
         mineral_pose = org_obs[1][AGENT_ID][10:13]
         state = org_obs[1][AGENT_ID]
 
-        img = bulr_img(img)
+        # img = blur_img(img).astype('uint8')
 
         obs = {"image": img, "state": state}
         # print(position, mineral_pose)

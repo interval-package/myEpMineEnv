@@ -21,7 +21,7 @@ def json2np(encodedNumpyData):
     finalNumpyArray = np.asarray(decodedArrays["array"])
     return finalNumpyArray
 
-def bulr_img(img, url='http://localhost:1123/dillusion'):
+def blur_img(img, url='http://192.168.1.13:1123/dillusion'):
     obj = np2json(img)
     r = requests.post(url, json=obj)
     res = r.text

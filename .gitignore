@@ -2,3 +2,5 @@ envs/SingleAgent/MineField_*/*
 **/__pycache__/*
 models/*.zip
 data/images/*
+*.avi
+*.png

@@ -6,7 +6,7 @@ from stable_baselines3.common.vec_env import DummyVecEnv, SubprocVecEnv
 from stable_baselines3.common.env_util import make_vec_env
 from stable_baselines3.common.utils import set_random_seed
 from envs.SingleAgent.mine_toy import EpMineEnv
-from envs.SingleAgent.TransEpMineEnv import TransEpMineEnv
+from envs.SingleAgent.TransEpMineEnv import TransEpMineEnv, blur_img
 
 import cv2
 
@@ -26,6 +26,14 @@ def make_env(env_id, rank, seed=0):
     set_random_seed(seed)
     return _init
 
+def save_video(img_array, name):
+    shape = (img_array[0].shape[1], img_array[0].shape[0])
+    out = cv2.VideoWriter(f'{name}.avi',cv2.VideoWriter_fourcc(*'DIVX'), 15, shape)
+    for i in range(len(img_array)):
+        out.write(img_array[i])
+    out.release()
+    pass
+
 if __name__ == "__main__":
     env_id = "EpMineEnv-v0"
     num_cpu = 1  # Number of processes to use
@@ -37,22 +45,25 @@ if __name__ == "__main__":
     # You can choose between `DummyVecEnv` (usually faster) and `SubprocVecEnv`
     # env = make_vec_env(env_id, n_envs=num_cpu, seed=0, vec_env_cls=DummyVecEnv)
 
-    env = TransEpMineEnv(port=3000)
+    env = TransEpMineEnv(port=3000, file_name="envs/SingleAgent/MineField_Windows-0505-random/drl.exe")
     # env = gym.make("EpMineEnv-v0")
     model = PPO("CnnPolicy", env, verbose=1)
     # model = PPO.load("./models/model_nav", env, verbose=1)
     # model.learn(total_timesteps=1e6)
 
     obs = env.reset()
-
-    img_array = []
-    for _ in range(1000):
+    arr = []
+    for _ in range(300):
         action, _states = model.predict(obs)
         obs, rewards, dones, info = env.step(action)
-        img_array.append(obs)
-        # cv2.imwrite(f"D:\\coding\\PythonProjects\\data\\img_epMine\\trainning\\pic_{_}_step.png", obs)
+        blur = blur_img(obs).astype('uint8')
 
-    out = cv2.VideoWriter('project.avi',cv2.VideoWriter_fourcc(*'DIVX'), 15, (128,128))
-    for i in range(len(img_array)):
-        out.write(img_array[i])
-    out.release()
+        disp = cv2.hconcat([obs, blur])
+        arr.append(disp)
+        cv2.imshow("disp", disp)
+        # cv2.imwrite("cur.png", obs)
+        print(f"step {_}, action {action}")
+        if cv2.waitKey(25) & 0xFF == ord('q'):
+            break
+
+    save_video(arr, "compare")

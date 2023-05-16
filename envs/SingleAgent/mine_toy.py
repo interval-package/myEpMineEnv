@@ -30,7 +30,7 @@ def warp_action(action):
 class EpMineEnv(gym.Env):
 
     def __init__(self,
-                 file_name: str = "envs/SingleAgent/MineField_Linux-0421/drl.x86_64",
+                 file_name: str = "envs/SingleAgent/MineField_Windows-0505-random/drl.exe",
                  port: Optional[int] = 2000,
                  seed: int = 0,
                  work_id: int = 0,
