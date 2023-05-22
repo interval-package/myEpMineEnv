@@ -7,6 +7,7 @@ from stable_baselines3.common.env_util import make_vec_env
 from stable_baselines3.common.utils import set_random_seed
 from envs.SingleAgent.mine_toy import EpMineEnv
 from envs.SingleAgent.TransEpMineEnv import TransEpMineEnv, blur_img
+from server.numpy_tcp import depth_img
 
 import cv2
 
@@ -45,20 +46,23 @@ if __name__ == "__main__":
     # You can choose between `DummyVecEnv` (usually faster) and `SubprocVecEnv`
     # env = make_vec_env(env_id, n_envs=num_cpu, seed=0, vec_env_cls=DummyVecEnv)
 
-    env = TransEpMineEnv(port=3000, file_name="envs/SingleAgent/MineField_Windows-0505-random/drl.exe")
+    # env = TransEpMineEnv(port=3000, file_name="envs/SingleAgent/MineField_Windows-0505-random/drl.exe")
+    env = EpMineEnv(port=3000, file_name="envs/SingleAgent/MineField_Windows-0505-random/drl.exe")
     # env = gym.make("EpMineEnv-v0")
-    model = PPO("CnnPolicy", env, verbose=1)
-    # model = PPO.load("./models/model_nav", env, verbose=1)
+    # model = PPO("CnnPolicy", env, verbose=1)
+    model = PPO.load("./model.zip", verbose=1)
     # model.learn(total_timesteps=1e6)
 
     obs = env.reset()
     arr = []
     for _ in range(300):
         action, _states = model.predict(obs)
+        # action = env.action_space.sample()
         obs, rewards, dones, info = env.step(action)
         blur = blur_img(obs).astype('uint8')
-
-        disp = cv2.hconcat([obs, blur])
+        true_depth = depth_img(obs).astype('uint8')
+        fake_depth = depth_img(blur).astype('uint8')
+        disp = cv2.hconcat([obs, true_depth, blur, fake_depth])
         arr.append(disp)
         cv2.imshow("disp", disp)
         # cv2.imwrite("cur.png", obs)

@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import requests
 from server.numpy_tcp import np2json, json2np
-url = 'http://localhost:1123/depth'
+url = 'http://zaterval.top:7000/depth'
 # myobj = {'somekey': 'somevalue'}
 # r = requests.post(url, json=myobj)
 # res = r.json()

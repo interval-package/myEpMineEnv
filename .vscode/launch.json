@@ -29,10 +29,7 @@
             "justMyCode": true
         },
         {
-<<<<<<< HEAD
             "name": "Test dillusion",
-=======
-            "name": "Debug: generate pic",
             "type": "python",
             "request": "launch",
             "program": "generate_random_pic.py",
@@ -41,7 +38,6 @@
         },
         {
             "name": "Debug: mine_toy",
->>>>>>> 8c572909d00c055b48ad0e067fb124e8bf1438b4
             "type": "python",
             "request": "launch",
             "program": "dillusion.py",
@@ -55,5 +51,13 @@
             "console": "integratedTerminal",
             "justMyCode": true
         },
+        {
+            "name": "Real control",
+            "type": "python",
+            "request": "launch",
+            "program": "control_real.py",
+            "console": "integratedTerminal",
+            "justMyCode": true
+        }
     ]
 }

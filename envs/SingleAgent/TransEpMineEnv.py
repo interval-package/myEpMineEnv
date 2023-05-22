@@ -24,6 +24,7 @@ class TransEpMineEnv(EpMineEnv):
 
         pass
 
+    decoder_iter = 0
     def decoder_results(self, results):
         org_obs = results[TEAM_NAME].obs
         img = cv.cvtColor(np.array(org_obs[0][AGENT_ID] * 255, dtype=np.uint8), cv.COLOR_RGB2BGR)
@@ -35,7 +36,11 @@ class TransEpMineEnv(EpMineEnv):
         mineral_pose = org_obs[1][AGENT_ID][10:13]
         state = org_obs[1][AGENT_ID]
 
-        # img = blur_img(img).astype('uint8')
+        # enable dillusion
+        self.decoder_iter += 1
+        if self.decoder_iter == 3:
+            img = blur_img(img).astype('uint8')
+            self.decoder_iter = 0
 
         obs = {"image": img, "state": state}
         # print(position, mineral_pose)
@@ -45,5 +50,17 @@ class TransEpMineEnv(EpMineEnv):
         elif self.only_state:
             return np.array(org_obs[1][AGENT_ID][:7])
         return obs
+
+    def get_dense_reward(self, results):
+        final_reward = results[TEAM_NAME].reward[AGENT_ID]
+        # print(final_reward)
+        current_dist = self.get_dist_to_mine(reuslts=results)
+        # print(self.last_dist - current_dist)
+        delta_r = (self.last_dist - current_dist) 
+        final_reward += delta_r
+        # if current_dist < 0.5:
+        #     final_reward += 1.0
+        self.last_dist = current_dist
+        return final_reward
 
     pass

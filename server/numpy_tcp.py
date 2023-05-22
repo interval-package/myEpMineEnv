@@ -21,7 +21,25 @@ def json2np(encodedNumpyData):
     finalNumpyArray = np.asarray(decodedArrays["array"])
     return finalNumpyArray
 
-def blur_img(img, url='http://192.168.1.13:1123/dillusion'):
+Base_url="192.168.1.13"
+port = "1123"
+url = 'http://'+Base_url+':'+port
+
+def real_img(img, url=url+'/real'):
+    obj = np2json(img)
+    r = requests.post(url, json=obj)
+    res = r.text
+    res = json2np(res)
+    return res
+
+def blur_img(img, url=url+'/dillusion'):
+    obj = np2json(img)
+    r = requests.post(url, json=obj)
+    res = r.text
+    res = json2np(res)
+    return res
+
+def depth_img(img, url=url+'/depth'):
     obj = np2json(img)
     r = requests.post(url, json=obj)
     res = r.text
@@ -29,9 +47,12 @@ def blur_img(img, url='http://192.168.1.13:1123/dillusion'):
     return res
 
 if __name__ == "__main__":
-
-    import requests
-    url = 'http://localhost:1123/process'
-    myobj = {'somekey': 'somevalue'}
-    r = requests.post(url, json={"key": "value"})
-    res = r.json()
+    import cv2
+    temp_path = "cycleGAN/datasets/epMine_ver4/trainA/step_0.png"
+    img = cv2.imread(temp_path)
+    # img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    obj = np2json(img)
+    r = requests.post(url, json=obj)
+    res = r.text
+    res = json2np(res)
+    cv2.imwrite("tcp.png", res)
